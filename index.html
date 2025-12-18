@@ -1,3 +1,193 @@
+<!DOCTYPE html>
+<html>
 <head>
-    omg hi!!!
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        /* Серая боковая панель */
+        .sidebar {
+            width: 15%;
+            height: 100vh;
+            background-color: #464451;
+            border-right: 2px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 10px;
+            overflow-y: auto;
+        }
+        
+        /* Основное содержимое с iframe */
+        .content {
+            width: 85%;
+            height: 100vh;
+        }
+        
+        /* Кнопки в боковой панели */
+        .sidebar button {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 8px 0;
+            background-color: #5c6bc0;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sidebar button:hover {
+            background-color: #3f51b5;
+            transform: translateX(5px);
+        }
+        
+        .sidebar button:active {
+            background-color: #3949ab;
+            transform: translateX(2px);
+        }
+        
+        /* Активная кнопка */
+        .sidebar button.active {
+            background-color: #ff9800;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 152, 0, 0.3);
+        }
+        
+        /* iframe занимает всю доступную область */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        
+        /* Заголовок боковой панели */
+        .sidebar h3 {
+            color: #fff;
+            border-top: 2px solid #fff;
+            text-align: center;
+            font-size: 18px;
+            margin-top: auto;
+        }
+        
+        /* Прокрутка для боковой панели */
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: #e0e0e0;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 25%;
+                padding: 10px 5px;
+            }
+            
+            .content {
+                width: 75%;
+            }
+            
+            .sidebar button {
+                padding: 10px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
+<body>
+    <!-- Серая боковая панель -->
+    <div class="sidebar">
+        <button 
+            onclick="changeIframe('https://essyrev.github.io/potato_gmod/lua_main.html', this)">
+            Главная
+        </button>
+
+        <button
+            onclick="changeIframe('https://essyrev.github.io/potato_gmod/pac3_event.html', this)" 
+            class="active">
+            Lua PAC3 Event
+        </button>
+
+        <button 
+            onclick="changeIframe('https://essyrev.github.io/potato_gmod/loadouts.html', this)">
+            Lua Loadout
+        </button>
+
+
+        <h3>Сделано с DeepSeek.</h3>
+    </div>
+    
+    <!-- Основное содержимое -->
+    <div class="content">
+        <iframe 
+            id="myIframe"
+            src="https://essyrev.github.io/potato_gmod/pac3_event.html" 
+            frameborder="0"
+            loading="lazy"
+            allowfullscreen>
+        </iframe>
+    </div>
+
+    <script>
+        function changeIframe(url, buttonElement) {
+            // Меняем ссылку в iframe
+            document.getElementById('myIframe').src = url;
+            
+            // Убираем класс active у всех кнопок
+            document.querySelectorAll('.sidebar button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Добавляем класс active к нажатой кнопке
+            if (buttonElement) {
+                buttonElement.classList.add('active');
+            }
+            
+            // Добавляем анимацию перехода
+            const iframe = document.getElementById('myIframe');
+            iframe.style.opacity = '0.5';
+            setTimeout(() => {
+                iframe.style.opacity = '1';
+            }, 300);
+        }
+        
+        // Обработка ошибок загрузки iframe
+        document.getElementById('myIframe').addEventListener('error', function() {
+            console.error('Ошибка загрузки iframe');
+            this.src = 'about:blank';
+            alert('Не удалось загрузить страницу. Проверьте URL или подключение к интернету.');
+        });
+        
+        // Дополнительно: можно добавить индикатор загрузки
+        document.getElementById('myIframe').addEventListener('load', function() {
+            this.style.opacity = '1';
+        });
+    </script>
+</body>
+</html>
