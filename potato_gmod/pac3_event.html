@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #352d2d;
+        }
+
+        pre.lua-code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre;
+            margin: 0;
+        }
+        .lua-keyword { color: #ff79c6; }
+        .lua-string { color: #f1fa8c; }
+        .lua-number { color: #bd93f9; }
+        .lua-comment { color: #6272a4; }
+        .lua-function { color: #50fa7b; }
+    </style>
+</head>
+<body>
+    <pre id="code-container" class="lua-code"></pre>
+
+    <script>
+        const luaCode = `
+Вы можете создать любое событие при нажатии по вам бинда +use другими игроками
+- Создайте событие command в pac3
+- Переименуйте так, как вам нужно (изначально название события - change_me)
+
+hook.Add("PAC3_KEYPRESS_PLAYER","example_hook_name",function(ply)
+    RunConsoleCommand("pac_event","change_me")
+end)`;
+
+        function highlightLua(code) {
+            // Сохраняем пробелы и табы
+            const escaped = code
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/ /g, '&nbsp;')
+                .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+            
+            // Теперь подсвечиваем (важен порядок!)
+            return escaped
+                .replace(/(&nbsp;)*--[^<]*/g, '<span class="lua-comment">$&</span>')
+                .replace(/(["'])(?:(?=(\\?))\2.)*?\1/g, '<span class="lua-string">$&</span>')
+                .replace(/\b\d+(\.\d+)?\b/g, '<span class="lua-number">$&</span>')
+                .replace(/\b(function|end|if|then|else|elseif|for|while|do|repeat|until|in|local|return|break|nil|false|true|and|or|not|change_me|use)\b/g, 
+                    '<span class="lua-keyword">$&</span>')
+                .replace(/\b(print|type|pairs|ipairs|next|error|assert|pcall|xpcall|LocalPlayer|pac3)\b/g, 
+                    '<span class="lua-function">$&</span>');
+        }
+
+        document.getElementById('code-container').innerHTML = 
+            highlightLua(luaCode);
+    </script>
+</body>
+</html>
